@@ -24,3 +24,4 @@ jobs:
           MODRINTH_TOKEN: ${{ secrets.MODRINTH_TOKEN }}
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           CURSE_TOKEN: ${{ secrets.CURSE_DEPLOY }}
+          COMMIT_MESSAGE: ${{ github.event.head_commit.message }}
