@@ -3,6 +3,7 @@ package pro.mikey.mods.pop;
 import net.minecraft.resources.ResourceLocation;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.event.lifecycle.FMLClientSetupEvent;
+import net.neoforged.fml.loading.FMLEnvironment;
 import net.neoforged.neoforge.common.NeoForge;
 import net.neoforged.neoforge.event.RegisterCommandsEvent;
 import org.slf4j.Logger;
@@ -24,11 +25,13 @@ public class Pop {
     public Pop(IEventBus modEventBus, ModContainer modContainer) {
         modEventBus.addListener(this::commonSetup);
         modEventBus.addListener(this::onClientSetup);
-
-        modEventBus.addListener(ClientInit::onScreenRender);
         modEventBus.addListener(Networking::register);
 
         NeoForge.EVENT_BUS.register(this);
+
+        if (FMLEnvironment.dist.isClient()) {
+            modEventBus.addListener(ClientInit::onScreenRender);
+        }
 
 //        modContainer.registerConfig(ModConfig.Type.COMMON, Config.SPEC);
     }
