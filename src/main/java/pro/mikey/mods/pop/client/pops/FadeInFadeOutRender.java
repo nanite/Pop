@@ -14,17 +14,14 @@ import pro.mikey.mods.pop.data.PopData;
  */
 public class FadeInFadeOutRender implements IPopRender {
     float lastOpacity = 0.0F;
-    float lastXOffset = -5.0f;
 
     @Override
     public void render(PopData pop, GuiGraphics graphics, DeltaTracker deltaTracker) {
         pop.tracker().onRenderFrame();
         var stage = pop.tracker().getStage();
-        var durationInTicks = pop.tracker().duration();
         var currentStageCompletion = pop.tracker().currentStageCompletion();
 
         var delta = deltaTracker.getGameTimeDeltaTicks();
-        long gameTime = Minecraft.getInstance().level.getGameTime();
 
         // Fade in and out, smoothly by lerping the opacity
         float opacity = 1.0f;
@@ -33,12 +30,6 @@ public class FadeInFadeOutRender implements IPopRender {
             float nextOpacity = stage == AnimStage.IN ? currentStageCompletion / 100.0F : 1.0F - (currentStageCompletion / 100.0F);
             lastOpacity = nextOpacity;
             opacity = Mth.lerp(delta, lastOpacity, nextOpacity);
-
-            // Slide in from negative 5f, slide out to pos 5f
-//            float nextXOffset = stage == AnimStage.IN ? (currentStageCompletion / 100.0F * 5) : 5.0F - (currentStageCompletion / 100.0F * 5);
-//            lastXOffset = nextXOffset;
-//
-//            xOffset = Mth.lerp(delta, lastXOffset, nextXOffset);
         }
 
         PoseStack pose = graphics.pose();
@@ -54,7 +45,7 @@ public class FadeInFadeOutRender implements IPopRender {
         int y = location[1];
 
         graphics.drawString(Minecraft.getInstance().font, pop.content(), x, (int) (y + xOffset), 0xFFFFFF);
-
+        pose.popPose();
         RenderSystem.setShaderColor(1.0f, 1.0f, 1.0f, 1.0f);
 
 // Just for debugging
