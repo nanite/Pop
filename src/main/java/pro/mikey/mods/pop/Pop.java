@@ -1,19 +1,17 @@
 package pro.mikey.mods.pop;
 
 import net.minecraft.resources.ResourceLocation;
-import net.neoforged.bus.api.SubscribeEvent;
-import net.neoforged.fml.event.lifecycle.FMLClientSetupEvent;
-import net.neoforged.fml.loading.FMLEnvironment;
-import net.neoforged.neoforge.common.NeoForge;
-import net.neoforged.neoforge.event.RegisterCommandsEvent;
+import net.minecraftforge.common.MinecraftForge;
+import net.minecraftforge.event.RegisterCommandsEvent;
+import net.minecraftforge.eventbus.api.SubscribeEvent;
+import net.minecraftforge.fml.common.Mod;
+import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
+import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
+import net.minecraftforge.fml.loading.FMLEnvironment;
 import org.slf4j.Logger;
 
 import com.mojang.logging.LogUtils;
 
-import net.neoforged.bus.api.IEventBus;
-import net.neoforged.fml.ModContainer;
-import net.neoforged.fml.common.Mod;
-import net.neoforged.fml.event.lifecycle.FMLCommonSetupEvent;
 import pro.mikey.mods.pop.client.ClientInit;
 import pro.mikey.mods.pop.net.Networking;
 
@@ -22,33 +20,31 @@ public class Pop {
     public static final String MODID = "pop";
     private static final Logger LOGGER = LogUtils.getLogger();
 
-    public Pop(IEventBus modEventBus, ModContainer modContainer) {
-        modEventBus.addListener(this::commonSetup);
-        modEventBus.addListener(this::onClientSetup);
-        modEventBus.addListener(Networking::register);
+    public Pop() {
+        var modEventBus = FMLJavaModLoadingContext.get().getModEventBus();
 
-        NeoForge.EVENT_BUS.register(this);
+        modEventBus.addListener(this::onClientSetup);
+
+        MinecraftForge.EVENT_BUS.register(this);
 
         if (FMLEnvironment.dist.isClient()) {
             modEventBus.addListener(ClientInit::onScreenRender);
         }
 
-//        modContainer.registerConfig(ModConfig.Type.COMMON, Config.SPEC);
+        Networking.register();
     }
 
-    private void commonSetup(final FMLCommonSetupEvent event) {
-    }
 
     private void onClientSetup(final FMLClientSetupEvent event) {
         ClientInit.init();
     }
 
     @SubscribeEvent
-    private void onRegisterCommands(final RegisterCommandsEvent event) {
+    public void onRegisterCommands(final RegisterCommandsEvent event) {
         event.getDispatcher().register(PopCommands.register(event.getBuildContext()));
     }
 
     public static ResourceLocation id(String path) {
-        return ResourceLocation.fromNamespaceAndPath(MODID, path);
+        return new ResourceLocation(MODID, path);
     }
 }

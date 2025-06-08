@@ -1,19 +1,18 @@
 package pro.mikey.mods.pop.client;
 
-import net.minecraft.client.DeltaTracker;
 import net.minecraft.client.gui.GuiGraphics;
-import net.minecraft.client.gui.LayeredDraw;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraftforge.client.gui.overlay.ForgeGui;
+import net.minecraftforge.client.gui.overlay.IGuiOverlay;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import pro.mikey.mods.pop.Pop;
 import pro.mikey.mods.pop.client.pops.PopManager;
 import pro.mikey.mods.pop.data.PopData;
 
 import javax.annotation.Nullable;
 
-public class PopLayer implements LayeredDraw.Layer {
-    public static final ResourceLocation LAYER_ID = Pop.id("pop_layer");
+public class PopLayer implements IGuiOverlay {
+    public static final String LAYER_ID = "overlay-layer";
 
     private static final Logger LOGGER = LoggerFactory.getLogger(PopLayer.class);
 
@@ -38,7 +37,7 @@ public class PopLayer implements LayeredDraw.Layer {
     }
 
     @Override
-    public void render(GuiGraphics guiGraphics, DeltaTracker deltaTracker) {
+    public void render(ForgeGui forgeGui, GuiGraphics guiGraphics, float partialTicks, int screenWidth, int screenHeigh) {
         var pop = getNextOrCurrent();
         if (pop == null) {
             return;
@@ -52,6 +51,6 @@ public class PopLayer implements LayeredDraw.Layer {
             return;
         }
 
-        renderer.render(currentPop, guiGraphics, deltaTracker);
+        renderer.render(currentPop, guiGraphics, partialTicks);
     }
 }

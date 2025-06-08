@@ -1,7 +1,7 @@
 package pro.mikey.mods.pop.client;
 
-import net.neoforged.bus.api.SubscribeEvent;
-import net.neoforged.neoforge.client.event.RegisterGuiLayersEvent;
+import net.minecraftforge.client.event.RegisterGuiOverlaysEvent;
+import net.minecraftforge.eventbus.api.SubscribeEvent;
 
 public class ClientInit {
     public static void init() {
@@ -9,7 +9,7 @@ public class ClientInit {
     }
 
     @SubscribeEvent
-    public static void onScreenRender(RegisterGuiLayersEvent event) {
+    public static void onScreenRender(RegisterGuiOverlaysEvent event) {
         event.registerAboveAll(PopLayer.LAYER_ID, new PopLayer());
     }
 }

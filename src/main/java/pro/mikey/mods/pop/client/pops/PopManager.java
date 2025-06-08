@@ -1,7 +1,7 @@
 package pro.mikey.mods.pop.client.pops;
 
-import net.neoforged.api.distmarker.Dist;
-import net.neoforged.neoforgespi.Environment;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.forgespi.Environment;
 import pro.mikey.mods.pop.data.PopData;
 
 import java.util.ArrayDeque;

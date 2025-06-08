@@ -3,15 +3,15 @@ package pro.mikey.mods.pop;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.player.Player;
-import net.neoforged.api.distmarker.Dist;
-import net.neoforged.fml.loading.FMLEnvironment;
-import net.neoforged.neoforge.network.PacketDistributor;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.fml.loading.FMLEnvironment;
 import pro.mikey.mods.pop.client.pops.AnimTracker;
 import pro.mikey.mods.pop.client.pops.FadeInFadeOutRender;
 import pro.mikey.mods.pop.data.Placement;
 import pro.mikey.mods.pop.client.pops.PopManager;
 import pro.mikey.mods.pop.data.PopData;
 import pro.mikey.mods.pop.net.ClientCreatePopPacket;
+import pro.mikey.mods.pop.net.Networking;
 
 /**
  * This class is almost exclusively added for KubeJS support.
@@ -60,7 +60,7 @@ public class PopBuilder {
         var packet = new ClientCreatePopPacket(content, placement, durationInSeconds);
 
         // Send the packet to the player
-        PacketDistributor.sendToPlayer((ServerPlayer) player, packet);
+        Networking.sendTo(packet, (ServerPlayer) player);
     }
 
     public void display() {

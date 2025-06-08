@@ -12,10 +12,10 @@ import net.minecraft.commands.Commands;
 import net.minecraft.commands.arguments.ComponentArgument;
 import net.minecraft.commands.arguments.EntityArgument;
 import net.minecraft.network.chat.Component;
-import net.neoforged.neoforge.network.PacketDistributor;
-import net.neoforged.neoforge.server.command.EnumArgument;
+import net.minecraftforge.server.command.EnumArgument;
 import pro.mikey.mods.pop.data.Placement;
 import pro.mikey.mods.pop.net.ClientCreatePopPacket;
+import pro.mikey.mods.pop.net.Networking;
 
 public class PopCommands {
     // TODO: Translate
@@ -28,12 +28,12 @@ public class PopCommands {
                 .then(Commands.argument("target", EntityArgument.players())
                     .then(Commands.argument("placement", EnumArgument.enumArgument(Placement.class))
                             .then(Commands.argument("duration", IntegerArgumentType.integer(1))
-                                    .then(Commands.argument("content", ComponentArgument.textComponent(context)).executes(PopCommands::sendPop))
+                                    .then(Commands.argument("content", ComponentArgument.textComponent()).executes(PopCommands::sendPop))
                                     .then(Commands.argument("text", StringArgumentType.greedyString()).executes(PopCommands::sendPop))
                             )
                     )
                     .then(Commands.argument("duration", IntegerArgumentType.integer(1))
-                            .then(Commands.argument("content", ComponentArgument.textComponent(context)).executes(PopCommands::sendPop))
+                            .then(Commands.argument("content", ComponentArgument.textComponent()).executes(PopCommands::sendPop))
                             .then(Commands.argument("text", StringArgumentType.greedyString()).executes(PopCommands::sendPop))
                     )
                 )
@@ -65,7 +65,7 @@ public class PopCommands {
 
         var packet = new ClientCreatePopPacket(content, placement, duration);
         for (var target : targets) {
-            PacketDistributor.sendToPlayer(target, packet);
+            Networking.sendTo(packet, target);
         }
         return 0;
     }

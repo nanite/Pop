@@ -1,7 +1,7 @@
 plugins {
     id 'java-library'
     id 'maven-publish'
-    id 'net.neoforged.moddev' version '2.0.78'
+    id 'net.neoforged.moddev.legacyforge' version '2.0.78'
     id "me.modmuss50.mod-publish-plugin" version "0.8.4"
     id 'idea'
     id 'pro.mikey.plugins.insaniam' version "0.1-SNAPSHOT"
@@ -22,10 +22,10 @@ base {
     archivesName = mod_id
 }
 
-java.toolchain.languageVersion = JavaLanguageVersion.of(21)
+java.toolchain.languageVersion = JavaLanguageVersion.of(17)
 
-neoForge {
-    version = project.neo_version
+legacyForge {
+    version = project.minecraft_version + "-" + project.neo_version
 
     parchment {
         mappingsVersion = project.parchment_mappings_version
@@ -97,7 +97,7 @@ var generateModMetadata = tasks.register("generateModMetadata", ProcessResources
 }
 
 sourceSets.main.resources.srcDir generateModMetadata
-neoForge.ideSyncTask generateModMetadata
+legacyForge.ideSyncTask generateModMetadata
 
 publishing {
     publications {
@@ -138,30 +138,28 @@ publishMods {
     version = "${mod_version}"
     type = STABLE
 
-    file = jar.archiveFile
+    file = reobfJar.archiveFile
     displayName = "Pop ${mod_version}"
     modLoaders.add("neoforge")
+    modLoaders.add("forge")
 
     // Get the commit message from the environment variable
     def commitMessage = providers.environmentVariable("COMMIT_MESSAGE").orElse("No commit message provided")
 
     curseforge {
-        dryRun = commitMessage.get().contains("[skip-curse]")
         accessToken = curseToken.orElse("dryRun")
         projectId = "1231826"
         minecraftVersions.add("${minecraft_version}")
     }
 
     modrinth {
-        dryRun = commitMessage.get().contains("[skip-modrinth]")
         accessToken = providers.environmentVariable("MODRINTH_TOKEN")
         projectId = "uu63G4RC"
         minecraftVersions.add("${minecraft_version}")
     }
 
     github {
-        dryRun = commitMessage.get().contains("[skip-github]")
-        file = jar.archiveFile
+        file = reobfJar.archiveFile
 
         repository = "nanite/pop"
         accessToken = providers.environmentVariable("GITHUB_TOKEN")

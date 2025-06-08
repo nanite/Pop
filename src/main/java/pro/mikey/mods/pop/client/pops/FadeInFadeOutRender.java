@@ -2,7 +2,6 @@ package pro.mikey.mods.pop.client.pops;
 
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.PoseStack;
-import net.minecraft.client.DeltaTracker;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.util.Mth;
@@ -16,12 +15,10 @@ public class FadeInFadeOutRender implements IPopRender {
     float lastOpacity = 0.0F;
 
     @Override
-    public void render(PopData pop, GuiGraphics graphics, DeltaTracker deltaTracker) {
+    public void render(PopData pop, GuiGraphics graphics, float partialTicks) {
         pop.tracker().onRenderFrame();
         var stage = pop.tracker().getStage();
         var currentStageCompletion = pop.tracker().currentStageCompletion();
-
-        var delta = deltaTracker.getGameTimeDeltaTicks();
 
         // Fade in and out, smoothly by lerping the opacity
         float opacity = 1.0f;
@@ -29,7 +26,7 @@ public class FadeInFadeOutRender implements IPopRender {
         if (stage != AnimStage.IDLE) {
             float nextOpacity = stage == AnimStage.IN ? currentStageCompletion / 100.0F : 1.0F - (currentStageCompletion / 100.0F);
             lastOpacity = nextOpacity;
-            opacity = Mth.lerp(delta, lastOpacity, nextOpacity);
+            opacity = Mth.lerp(partialTicks, lastOpacity, nextOpacity);
         }
 
         PoseStack pose = graphics.pose();
