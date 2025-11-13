@@ -48,12 +48,16 @@ public class PopBuilder {
     }
 
     public PopBuilder placement(String placement) {
+        return placementByString(placement);
+    }
+
+    public PopBuilder placementByString(String placement) {
         this.placement = Placement.fromString(placement);
         return this;
     }
 
     public void sendToPlayer(Player player) {
-        if (FMLEnvironment.dist == Dist.CLIENT) {
+        if (player.level().isClientSide()) {
             throw new IllegalStateException("This method should only be called on the server side");
         }
 
@@ -64,10 +68,6 @@ public class PopBuilder {
     }
 
     public void display() {
-        if (FMLEnvironment.dist != Dist.CLIENT) {
-            throw new IllegalStateException("This method should only be called on the client side");
-        }
-
         PopManager.get().addPop(this.build());
     }
 

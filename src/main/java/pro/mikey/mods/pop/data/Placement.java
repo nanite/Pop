@@ -13,10 +13,16 @@ public enum Placement {
 
     private static final Placement[] VALUES = values();
 
+    /**
+     * Valid inputs would be lowercase or uppercase strings with spaces, dots, or dashes.
+     * Examples: "top left", "TOP.LEFT", "bottom-right"
+     * @param string The input string representing the placement
+     * @return The corresponding Placement enum value. Defaults to TOP_LEFT if no match is found.
+     */
     public static Placement fromString(String string) {
-        var upperInput = string.toUpperCase();
+        var upperString = string.toUpperCase().replace(" ", "_").replace(".", "_").replace("-", "_");
         for (var placement : VALUES) {
-            if (placement.name().equals(upperInput)) {
+            if (placement.name().equals(upperString)) {
                 return placement;
             }
         }

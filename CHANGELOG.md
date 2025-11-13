@@ -1,3 +1,10 @@
+## [21.1.3]
+
+### Fixed
+
+- Various issues with KubeJS use of the pop builder
+  - Simpler naming of the placement enum for string inputs. `TOP_LEFT` and all variants can now be referenced as "top left, "top.left", or "top-left". And this applies to all placement enum values.
+
 ## [21.1.2]
 
 ### Fixed
